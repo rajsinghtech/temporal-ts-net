@@ -45,6 +45,11 @@ type ServerConfig struct {
 }
 
 func ParseExtensionArgs(args []string) (ExtensionOptions, []string, error) {
+	// Temporal's extension system passes the subcommand name (e.g. "start-dev") as
+	// args[0]. Strip it so it doesn't get forwarded to the subprocess.
+	if len(args) > 0 && args[0] == "start-dev" {
+		args = args[1:]
+	}
 	opts := ExtensionOptions{
 		TailscaleHostname:   "temporal-dev",
 		MaxConnections:      defaultMaxConnections,
